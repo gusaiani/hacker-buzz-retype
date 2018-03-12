@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   fetchStories,
+  fetchMoreStories,
+  refreshStories
 } from '../../actions/StoryActions';
 import { StoryListErrorMessage } from './StoryListErrorMessage';
+
+import StoryList from '../StoryList';
 
 export class StoryListContainer extends Component {
   constructor(props) {
@@ -42,7 +46,7 @@ export class StoryListContainer extends Component {
         this.props.fetchMoreStories(storyIds, category);
       }
     }
-  }
+  };
 
   render() {
     const { stories, navigation, route, refreshing, hasErrored } = this.props;
@@ -50,7 +54,14 @@ export class StoryListContainer extends Component {
     if (hasErrored) {
       return <StoryListErrorMessage handleTryAgain={this.handleRefresh} />;
     }
-
+    return (
+      <StoryList
+        stories={stories}
+        refreshing={refreshing}
+        navigation={navigation}
+        handleLoadMore={this.handleRefresh}
+      />
+    );
   }
 }
 

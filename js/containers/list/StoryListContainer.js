@@ -7,7 +7,7 @@ import {
 } from '../../actions/StoryActions';
 import { StoryListErrorMessage } from './StoryListErrorMessage';
 
-import StoryList from '../StoryList';
+import StoryList from './StoryList';
 
 export class StoryListContainer extends Component {
   constructor(props) {

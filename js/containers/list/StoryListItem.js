@@ -47,6 +47,58 @@ export class StoryListItem extends PureComponent {
     const { title, by, time, score, descendants } = story;
 
     const rowStyles = [styles.row, { opacity: this._animated }];
+
+    return (
+      <StoryItemPlaceholder
+        style={placeholder}
+        customAnimate={Shine}
+        onReady={title !== undefined && id !== undefined}
+        showScore={this.props.route !== 'JobStory'}
+      >
+        <Animated.View style={rowStyles}>
+          <View style={container}>
+            <View
+              style={[
+                type,
+                {
+                  backgroundColor: isFavorited
+                    ? darkTheme.savedStory
+                    : 'transparent'
+                }
+              ]}
+            />
+            <View style={textContainer}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={event => this.onTitlePress(event, story)}
+              >
+                <Text style={titleText}>
+                  {title}
+                </Text>
+              </TouchableOpacity>
+              <Text style={author}>
+                {by}
+              </Text>
+              <Text style={timeAgo}>
+                {convertTimestamp(time)}
+              </Text>
+            </View>
+            <View>
+              <ScoreAndComments
+                score={score}
+                comments={descendants}
+                type={story.category}
+              />
+            </View>
+          </View>
+        </Animated.View>
+      </StoryItemPlaceholder>
+    );
+  };
+
+  render() {
+    const { story, id, isFavorited } = this.props;
+    return this.renderStoryItem(story, id, isFavorited);
   }
 }
 

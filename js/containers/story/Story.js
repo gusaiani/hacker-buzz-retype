@@ -21,8 +21,8 @@ export class Story extends Component {
       headerRight: Story.shareButton(navigation),
       title: descendants !== undefined
         ? descendants != 1
-          ? `${descendants} Comments`
-          : `${descendants} Comment`
+            ? `${descendants} Comments`
+            : `${descendants} Comment`
         : 'Job',
       headerTitleStyle: { color: darkTheme.headerTitle },
       headerStyle: {
@@ -30,7 +30,7 @@ export class Story extends Component {
         borderBottomColor: darkTheme.tabBarOutline,
         borderBottomWidth: 0.5
       },
-      headerTinColor: darkTheme.headerBackButton
+      headerTintColor: darkTheme.headerBackButton
     };
   };
 

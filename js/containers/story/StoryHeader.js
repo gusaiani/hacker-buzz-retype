@@ -4,22 +4,57 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Animated,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { darkTheme } from '../../styles';
+import { convertTimestamp } from '../../utils';
 import { openURL } from '../../network/web';
 import { connect } from 'react-redux';
 
 class StoryHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.animatedValue = new Animated.Value(0);
+    this.scaleValue = new Animated.Value(0);
+  }
+
+  handleFavoriteStory = () => {
+    this.animateBackgroundColor();
+
+  }
+
+  animateBackgroundColor = () => {
+    Animated.timing(this.animatedValue, {
+      toValue: this.props.isFavorited ? 0 : 1,
+      duration: 300,
+      easting: Easing.linear
+    }).start();
+  };
+
   render() {
     const { story } = this.props;
     const {
       container,
       headerContainer,
       textContainer,
+      commentsContainer,
+      favoriteStoryContainer,
       title,
+      author,
+      timeAgo
     } = styles;
+
+    var bgColor = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['transparent', darkTheme.savedStory]
+    });
+
+    const buttonScale = this.scaleValue.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [1, 1.05, 1]
+    });
 
     return (
       <View style={container}>
@@ -55,13 +90,50 @@ class StoryHeader extends Component {
                 </Text>
                 <View style={commentsContainer}>
                   <Icon
+                    style={{ alignSelf: 'center', marginRight: 5 }}
+                    size={14}
+                    name={'clock-o'}
+                    color={darkTheme.storyTimeAgo}
+                  />
+                  <Text style={timeAgo}>
+                    {convertTimestamp(storytime)}
+                  </Text>
                 </View>
               </View>
+              <Animated.View
+                style={[
+                  favoriteStoryContainer,
+                  { backgroundColor: bgColor },
+                  { transform: [{ scale: buttonScale }] }
+                ]}
+              >
+                <Icon.Button
+                  color="white"
+                  name={isFavorited ? 'heart' : 'heart-o'}
+                  activeOpacity={0.5}
+                  backgroundColor={
+                    isFavorited ? darkTheme.savedStory : 'transparent'
+                  }
+                  underlayColor="transparent"
+                  iconStyle={{ marginRight: !isFavorited ? 10 : 0 }}
+                  onPress={this.handleFavoriteStory}
+                >
+                  {!isFavorited && 'Favorite'}
+                </Icon.Button>
+              </Animated.View>
             </View>
           </View>
         </View>
+        <View
+          style={{
+            marginTop: 5,
+            height: 1,
+            width: '100%',
+            backgroundColor: darkTheme.storyDividingLine
+          }}
+        />
       </View>
-    )
+    );
   }
 }
 
@@ -116,6 +188,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5
   },
+  favoriteStoryContainer: {
+    borderWidth: 1,
+    borderColor: darkTheme.savedStory,
+    borderRadius: 4,
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    marginRight: 10,
+    marginBottom: 5,
+    height: '70%'
+  },
   title: {
     color: darkTheme.storyTitle,
     fontSize: 30,
@@ -130,6 +212,10 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingLeft: 10
   },
+  timeAgo: {
+    color: darkTheme.storyTimeAgo,
+    fontSize: 17.5
+  }
 });
 
 const mapStateToProps = (state, headerProps) => {

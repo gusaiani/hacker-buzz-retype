@@ -2,12 +2,24 @@ import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import { darkTheme } from '../../styles';
 import StoryHeader from './StoryHeader';
+import { EmptyStory } from './EmptyStory';
 
 export default class CommentList extends PureComponent {
   renderHeader = () => {
     const { story } = this.props.navigation.state.params;
-    return <StoryHeader
+    return <StoryHeader story={story} />;
+  };
+
+  renderFooter = () => {
+    if (this.props.navigation.state.params.story.category === 'jobstories') {
+      return null;
+    }
+
+    if (this.props.kids === undefined) {
+      return <EmptyStory />;
+    }
   }
+
   render() {
     const { comments, kids } = this.props;
     return (
@@ -21,7 +33,7 @@ export default class CommentList extends PureComponent {
         keyExtractor={this._keyExtractor}
         renderItem={this.renderItem}
         ListHeaderComponent={this.renderHeader}
-
+        ListFooterComponent={this.renderFooter}
 
       />
     )

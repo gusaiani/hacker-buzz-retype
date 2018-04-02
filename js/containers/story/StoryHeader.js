@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
+  Easing
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
@@ -12,6 +13,7 @@ import { darkTheme } from '../../styles';
 import { convertTimestamp } from '../../utils';
 import { openURL } from '../../network/web';
 import { connect } from 'react-redux';
+import { favoriteStory, unfavoriteStory } from '../../actions/FavoriteActions';
 
 class StoryHeader extends Component {
   constructor(props) {
@@ -22,8 +24,33 @@ class StoryHeader extends Component {
 
   handleFavoriteStory = () => {
     this.animateBackgroundColor();
+    this.scaleButton();
+    this.toggleFavoriteStory();
+  };
 
-  }
+  toggleFavoriteStory = () => {
+    const { isFavorited } = this.props;
+    !isFavorited ? this.favoriteStory() : this.unfavoriteStory();
+  };
+
+  favoriteStory = () => {
+    const { story } = this.props;
+    this.props.favoriteStory(story);
+  };
+
+  unfavoriteStory = () => {
+    const { story } = this.props;
+    this.props.unfavoriteStory(story.id);
+  };
+
+  scaleButton = () => {
+    this.scaleValue.setValue(0);
+    Animated.timing(this.scaleValue, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.easeOutBack
+    }).start();
+  };
 
   animateBackgroundColor = () => {
     Animated.timing(this.animatedValue, {
@@ -35,6 +62,7 @@ class StoryHeader extends Component {
 
   render() {
     const { story } = this.props;
+    const { isFavorited } = this.props;
     const {
       container,
       headerContainer,
@@ -96,7 +124,7 @@ class StoryHeader extends Component {
                     color={darkTheme.storyTimeAgo}
                   />
                   <Text style={timeAgo}>
-                    {convertTimestamp(storytime)}
+                    {convertTimestamp(story.time)}
                   </Text>
                 </View>
               </View>
@@ -198,6 +226,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     height: '70%'
   },
+  commentsText: {
+    color: darkTheme.storyTimeAgo,
+    marginLeft: 5,
+    fontSize: 17.5,
+    fontWeight: '600',
+    alignSelf: 'center'
+  },
   title: {
     color: darkTheme.storyTitle,
     fontSize: 30,
@@ -211,6 +246,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
     paddingLeft: 10
+  },
+  divider: {
+    color: darkTheme.storyDivider,
+    fontSize: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 5
   },
   timeAgo: {
     color: darkTheme.storyTimeAgo,

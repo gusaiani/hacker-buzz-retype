@@ -10,7 +10,7 @@ const StoryCommentPlaceholder = ({ style }) => {
         <View
           style={{
             height: 15,
-            width: '15%'
+            width: '15%',
             backgroundColor: color
           }}
         />
@@ -35,12 +35,23 @@ const StoryCommentPlaceholder = ({ style }) => {
       </View>
       <View
         style={{
-        flex: 1,
-        flexDirection: 'column',
-
+          flex: 1,
+          flexDirection: 'column',
+          marginLeft: 10,
+          marginRight: 10
         }}
+      >
+        <View
+          style={{
+            flex: 1,
+            height: 200,
+            backgroundColor: color,
+            marginBottom: 5
+          }}
+        />
+      </View>
     </View>
-  )
-}
-export default Placeholder.connect(StoryCommentPlaceholder);
+  );
+};
 
+export default Placeholder.connect(StoryCommentPlaceholder);

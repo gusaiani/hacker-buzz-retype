@@ -3,6 +3,7 @@
     "isomorphic-fetch": "^2.2.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.1",
+    "react-native-collapsible": "^0.8.0",
     "react-native-htmlview": "0.10.0",
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-navigation": "1.0.0-beta-11",

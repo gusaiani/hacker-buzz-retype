@@ -26,9 +26,17 @@ export default class CommentList extends PureComponent {
     return (
       <View>
         <Comment comment={item} />
+        <View
+          style={{
+            width: '100%',
+            height: 5,
+            backgroundColor: '#282c34',
+            marginTop: 5
+          }}
+        />
       </View>
-    )
-  }
+    );
+  };
 
   renderFooter = () => {
     if (this.props.navigation.state.params.story.category === 'jobstories') {

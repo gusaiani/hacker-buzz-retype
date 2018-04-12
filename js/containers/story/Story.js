@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
+import {
+  fetchComments,
+  fetchMoreComments,
+  fetchCommentsClean
+} from '../../actions/CommentActions';
 import { darkTheme } from '../../styles';
 import CommentList from './CommentList';
 
@@ -58,6 +64,15 @@ export class Story extends Component {
     }
   };
 
+  handleRefresh = () => {
+    const { kids } = this.props.navigation.state.params.story;
+    if (kids) {
+      this.setState({ refreshing: true }, () => {
+        this.fetchComments();
+      });
+    }
+  };
+
   render() {
     const { navigation, isFetching, hasErrored, commentsByHash } = this.props;
     const { story } = navigation.state.params;
@@ -69,6 +84,7 @@ export class Story extends Component {
           kids={story.kids}
           navigation={navigation}
           handleLoadMore={this.handleLoadMore}
+          handleRefresh={this.handleRefresh}
         />
       </View>
     )
@@ -84,3 +100,12 @@ const mapStateToProps = (state, ownProps) => {
 
   return { comments, commentsByHash, isFetching, hasErrored };
 };
+
+const mapDispatchToProps = dispatch => ({
+  fetchComments: item => dispatch(fetchComments(item)),
+  fetchMoreComments: (storyId, ids) =>
+    dispatch(fetchMoreComments(storyId, ids)),
+  fetchCommentsClean: () => dispatch(fetchCommentsClean())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Story);

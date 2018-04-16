@@ -10,6 +10,7 @@ import { darkTheme } from '../../styles';
 import CommentList from './CommentList';
 
 const commentKidsLimit = 4;
+import ShareStory from '../../components/ShareStory'; 
 
 import values from 'lodash/values';
 
@@ -85,7 +86,11 @@ export class Story extends Component {
           navigation={navigation}
           handleLoadMore={this.handleLoadMore}
           handleRefresh={this.handleRefresh}
+          isFetchind={isFetching}
+          hasErrored={hasErrored}
         />
+        {story &&
+          <ShareStory}
       </View>
     )
   }

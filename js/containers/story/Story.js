@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
 import { TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -10,7 +11,8 @@ import { darkTheme } from '../../styles';
 import CommentList from './CommentList';
 
 const commentKidsLimit = 4;
-import ShareStory from '../../components/ShareStory'; 
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ShareStory from '../../components/ShareStory';
 
 import values from 'lodash/values';
 
@@ -45,6 +47,82 @@ export class Story extends Component {
     };
   };
 
+  static backButton = navigation => {
+    const { key } = navigation.state;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.dispatch(NavigationActions.back({ key }));
+        }}
+      >
+        <Icon
+          style={{ padding: 10 }}
+          name={'chevron-left'}
+          size={22}
+          color={darkTheme.headerTitle}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  static shareButton = navigation => {
+    return (
+      <TouchableOpacity onPress={_ => Story.showShareModal(navigation)}>
+        <Icon
+          style={{ padding: 10 }}
+          name={'share-alt'}
+          size={22}
+          color={darkTheme.headerTitle}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  static showShareModal = navigation => {
+    const { setParams } = navigation;
+    setParams({ isSharing: !navigation.state.params.isSharing });
+  };
+
+  componentDidMount() {
+    this.checkIfRefreshNeeded();
+  }
+
+  checkIfRefreshNeeded = () => {
+    const { comments } = this.props.comments;
+    const { kids } = this.props.navigation.state.params.story;
+
+    if (kids) {
+      const matchingId = comments.filter(comment => comment.id == kids[0]);
+
+      if (matchingId.length === 0) {
+        this.props.fetchCommentsClean();
+        this.loadMoreComments();
+      }
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isFetching !== this.state.refreshing) {
+      this.setState({ refreshing: false });
+    }
+  }
+
+  fetchComments = () => {
+    const { story } = this.props.navigation.state.params;
+    this.props.fetchComments(story);
+  };
+
+  getItems = (ids, start, end) => {
+    const { id } = this.props.navigation.state.params.story;
+
+    if (ids !== undefined && ids.length > 0) {
+      const kidIds = ids.slice(start, end);
+      if (kidIds.length > 0) {
+        this.props.fetchMoreComments(id, kidIds);
+      }
+    }
+  };
+
   handleLoadMore = () => {
     const { isFetching, commentsByHash } = this.props;
     const shouldLoadMore =
@@ -65,6 +143,12 @@ export class Story extends Component {
     }
   };
 
+  loadMoreComments = () => {
+    const { kids } = this.props.navigation.state.params.story;
+    const { start, end } = this.state;
+    this.getItems(kids, start, end);
+  };
+
   handleRefresh = () => {
     const { kids } = this.props.navigation.state.params.story;
     if (kids) {
@@ -73,6 +157,8 @@ export class Story extends Component {
       });
     }
   };
+
+  _keyExtractor = item => (item.id ? item.id : item);
 
   render() {
     const { navigation, isFetching, hasErrored, commentsByHash } = this.props;
@@ -86,13 +172,17 @@ export class Story extends Component {
           navigation={navigation}
           handleLoadMore={this.handleLoadMore}
           handleRefresh={this.handleRefresh}
-          isFetchind={isFetching}
+          isFetching={isFetching}
           hasErrored={hasErrored}
         />
         {story &&
-          <ShareStory}
+          <ShareStory
+            story={story}
+            showShareModal={Story.showShareModal}
+            navigation={navigation}
+          />}
       </View>
-    )
+    );
   }
 }
 

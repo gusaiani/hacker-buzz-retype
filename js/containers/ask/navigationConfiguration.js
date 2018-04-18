@@ -2,11 +2,7 @@ import { StackNavigator } from 'react-navigation';
 import AskStoriesContainer from './AskStoriesContainer';
 import Story from '../story/Story';
 import { transitionConfiguration } from '../../utils/animations/transitions';
-
-const routeConfiguration = {
-  AskStoriesContainer: { screen: AskStoriesContainer },
-  AskStory: { screen: Story }
-};
+import { darkTheme } from '../../styles';
 
 const routeConfiguration = {
   AskStoriesContainer: { screen: AskStoriesContainer },
@@ -20,7 +16,11 @@ const stackNavigatorConfiguration = {
   },
   gesturesEnabled: true,
   transitionConfig: transitionConfiguration,
-}
+  cardStyle: {
+    backgroundColor: darkTheme.headerBackground
+  }
+};
+
 export const NavigatorTabAsk = StackNavigator(
   routeConfiguration,
   stackNavigatorConfiguration

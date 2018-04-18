@@ -1,17 +1,16 @@
 import { StackNavigator } from 'react-navigation';
-import StoriesContainer from './StoriesContainer';
+import ShowStoriesContainer from './ShowStoriesContainer';
 import Story from '../story/Story';
 import { transitionConfiguration } from '../../utils/animations/transitions';
 import { darkTheme } from '../../styles';
 
 const routeConfiguration = {
-  StoriesContainer: { screen: StoriesContainer },
-  MainStory: { screen: Story }
+  ShowStoriesContainer: { screen: ShowStoriesContainer },
+  ShowStory: { screen: Story }
 };
 
 const stackNavigatorConfiguration = {
-  initialRouteName: 'StoriesContainer',
-  key: 'main',
+  initialRouteName: 'ShowStoriesContainer',
   navigationOptions: {
     headerBackTitle: null
   },
@@ -22,7 +21,7 @@ const stackNavigatorConfiguration = {
   }
 };
 
-export const NavigatorTabMain = StackNavigator(
+export const NavigatorTabShow = StackNavigator(
   routeConfiguration,
   stackNavigatorConfiguration
 );

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import { NavigatorTabMain } from '../containers/main/navigationConfiguration';
 import { NavigatorTabAsk } from '../containers/ask/navigationConfiguration';
+import { NavigatorTakShow } from '../containers/show/navigationConfiguration';
 
 import { tabBarReducer } from '../containers/navigationConfiguration';
 
@@ -11,6 +12,10 @@ const rootReducer = combineReducers({
     NavigatorTabMain.router.getStateForAction(action, state),
   tabAsk: (state, action) =>
     NavigatorTabAsk.router.getStateForAction(action, state),
+  tabShow: (state, action) =>
+    NavigatorTabShow.router.getStateForAction(action, state),
+  tabJobs: (state, action) =>
+    NavigatorTabJobs.router.getStateForAction(action, state),
 })
 
 export default rootReducer;

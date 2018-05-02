@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 
 import { NavigatorTabMain } from '../containers/main/navigationConfiguration';
 import { NavigatorTabAsk } from '../containers/ask/navigationConfiguration';
-import { NavigatorTakShow } from '../containers/show/navigationConfiguration';
+import { NavigatorTabShow } from '../containers/show/navigationConfiguration';
+import { NavigatorTabJobs } from '../containers/jobs/navigationConfiguration';
 
 import { tabBarReducer } from '../containers/navigationConfiguration';
 

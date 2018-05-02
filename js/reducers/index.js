@@ -4,6 +4,7 @@ import { NavigatorTabMain } from '../containers/main/navigationConfiguration';
 import { NavigatorTabAsk } from '../containers/ask/navigationConfiguration';
 import { NavigatorTabShow } from '../containers/show/navigationConfiguration';
 import { NavigatorTabJobs } from '../containers/jobs/navigationConfiguration';
+import { NavigatorTabMore } from '../containers/more/navigationConfiguration';
 
 import { tabBarReducer } from '../containers/navigationConfiguration';
 
@@ -17,6 +18,8 @@ const rootReducer = combineReducers({
     NavigatorTabShow.router.getStateForAction(action, state),
   tabJobs: (state, action) =>
     NavigatorTabJobs.router.getStateForAction(action, state),
+  tabMore: (state, action) =>
+    NavigatorTabMore.router.getStateForAction(action, state),
 })
 
 export default rootReducer;
